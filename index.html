@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Funklee</title>
+  <meta name="description" content="Funklee – das Walkie-Talkie für die Apple Watch.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,9 +16,81 @@
       <p>Walkie-Talkie für die Apple Watch</p>
     </div>
   </header>
-  <p>Knopf gedrückt halten, sprechen, loslassen – deine Sprachnachricht landet direkt auf der Uhr deines Gegenübers. Gekoppelt wird per 6-stelligem Code, Nachrichten verschwinden nach 3 Tagen von selbst.</p>
-  <nav><a href="support.html">Support</a><a href="privacy.html">Datenschutz</a></nav>
+
+  <section class="hero">
+    <div>
+      <h2>Drücken. Sprechen. Loslassen.</h2>
+      <p>Deine Sprachnachricht landet direkt auf der Uhr deines Gegenübers – mit Mitteilung und Namen. Gekoppelt wird per 6-stelligem Code, Nachrichten verschwinden nach 3 Tagen von selbst.</p>
+      <span class="badge">Für Apple Watch</span>
+    </div>
+
+    <div>
+      <div class="watch" aria-label="Funklee auf der Apple Watch">
+        <div class="band"></div>
+        <div class="case">
+          <div class="bezel">
+            <div class="screen">
+              <img src="screens/1-sprechen.png" alt="Sprech-Knopf: halten zum Sprechen" class="active">
+              <img src="screens/2-nachrichten.png" alt="Liste der Sprachnachrichten">
+              <img src="screens/3-kontakte.png" alt="Kontaktliste mit neuen Nachrichten">
+              <img src="screens/4-koppeln.png" alt="Koppeln per 6-stelligem Code">
+            </div>
+          </div>
+          <div class="crown"></div>
+          <div class="side-button"></div>
+        </div>
+        <div class="band bottom"></div>
+      </div>
+      <div class="dots" role="tablist"></div>
+      <div class="caption" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="card"><strong>🎙️&nbsp; Push-to-Talk</strong><p>Knopf gedrückt halten, sprechen, loslassen.</p></div>
+    <div class="card"><strong>🔔&nbsp; Mitteilungen</strong><p>Mit Name des Absenders, Antippen spielt ab.</p></div>
+    <div class="card"><strong>🔢&nbsp; Koppeln per Code</strong><p>Keine Telefonnummer, keine E-Mail.</p></div>
+    <div class="card"><strong>🔒&nbsp; Privat</strong><p>Kein Tracking, Nachrichten nach 3 Tagen weg.</p></div>
+  </section>
+
+  <nav style="margin-top:32px"><a href="support.html">Support</a><a href="privacy.html">Datenschutz</a></nav>
   <footer>Made by Chris with ❤️ in Bavaria · Flaggen-Emoji in der App: <a href="https://openmoji.org/">OpenMoji</a> (CC BY-SA 4.0)</footer>
 </main>
+
+<script>
+  // Cycles through the screenshots inside the watch mockup.
+  const images = [...document.querySelectorAll('.screen img')];
+  const dots = document.querySelector('.dots');
+  const caption = document.querySelector('.caption');
+  const captions = ['Halten zum Sprechen', 'Nachrichten abspielen', 'Neue Nachrichten auf einen Blick', 'Koppeln per Code'];
+  let current = 0;
+  let timer;
+
+  function show(index) {
+    images[current].classList.remove('active');
+    dots.children[current].classList.remove('active');
+    current = index;
+    images[current].classList.add('active');
+    dots.children[current].classList.add('active');
+    caption.textContent = captions[current];
+  }
+
+  function restart() {
+    clearInterval(timer);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      timer = setInterval(() => show((current + 1) % images.length), 3000);
+    }
+  }
+
+  images.forEach((img, i) => {
+    const dot = document.createElement('button');
+    dot.setAttribute('aria-label', captions[i]);
+    dot.addEventListener('click', () => { show(i); restart(); });
+    dots.appendChild(dot);
+  });
+  dots.children[0].classList.add('active');
+  caption.textContent = captions[0];
+  restart();
+</script>
 </body>
 </html>
